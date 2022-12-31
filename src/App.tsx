@@ -34,9 +34,9 @@ const Countdown = ({ target }: CountdownProps) => {
       console.log("interval");
       const diff = target.diffNow().shiftToAll().toObject();
       setNextTime([
-        clamp(diff.hours ?? 0, 0, 24),
-        clamp(diff.minutes ?? 0, 0, 60),
-        clamp(diff.seconds ?? 0, 0, 60),
+        clamp(diff.hours ?? 0, 0, Number.MAX_SAFE_INTEGER),
+        clamp(diff.minutes ?? 0, 0, Number.MAX_SAFE_INTEGER),
+        clamp(diff.seconds ?? 0, 0, Number.MAX_SAFE_INTEGER),
       ]);
     }, 100);
 
