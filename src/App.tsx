@@ -82,14 +82,12 @@ const Countdown = ({ target }: CountdownProps) => {
           position: "fixed",
         }}
       />
-      <div className={celebrate ? "" : "hidden"}>
-        <p className="celebration blinking ">
-          Frohes Neues ihr süßen Mäuse{" "}
-          <span role="img" aria-label="kissing emoji">
-            😘
-          </span>
-        </p>
-      </div>
+      <p className={`celebration ${celebrate ? "blinking" : "hidden"}`}>
+        Frohes Neues ihr süßen Mäuse{" "}
+        <span role="img" aria-label="kissing emoji">
+          😘
+        </span>
+      </p>
       <div className={`countdown ${!celebrate ? "" : "hidden"}`}>
         <span className="number">{formatTimeElement(hours)}</span>
         <span>:</span>
