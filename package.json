@@ -4,6 +4,7 @@
   "description": "",
   "keywords": [],
   "main": "src/index.tsx",
+  "license": "MIT",
   "dependencies": {
     "@fireworks-js/react": "2.10.0",
     "@types/lodash": "4.14.191",

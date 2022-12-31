@@ -31,14 +31,13 @@ const Countdown = ({ target }: CountdownProps) => {
       return;
     }
     interval.current = setInterval(() => {
-      console.log("interval");
       const diff = target.diffNow().shiftToAll().toObject();
       setNextTime([
         clamp(diff.hours ?? 0, 0, 24),
         clamp(diff.minutes ?? 0, 0, 60),
         clamp(diff.seconds ?? 0, 0, 60),
       ]);
-    }, 100);
+    }, 500);
 
     return () => clearInterval(interval.current);
   }, [target, celebrate]);
