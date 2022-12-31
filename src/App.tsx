@@ -54,13 +54,27 @@ const Countdown = ({ target }: CountdownProps) => {
         </p>
         <Fireworks
           options={{
-            gravity: 1.2,
-            acceleration: 1,
-            brightness: { min: 70, max: 100 },
-            rocketsPoint: {
-              min: 0,
+            opacity: 0.8,
+            friction: 1,
+            gravity: 1,
+            particles: 80,
+            explosion: 10,
+            brightness: {
+              min: 70,
               max: 100,
             },
+            intensity: 50,
+            lineWidth: {
+              explosion: {
+                min: 2,
+                max: 5,
+              },
+              trace: {
+                min: 0.1,
+                max: 1,
+              },
+            },
+            autoresize: true,
           }}
           style={{
             top: 0,
