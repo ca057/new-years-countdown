@@ -5,6 +5,8 @@ import { clamp } from "lodash";
 
 import "./styles.css";
 import queryString from "query-string";
+import { defaultFireworkOptions } from "./firework-options";
+import { FireworksHandlers } from "fireworks-js";
 
 const formatTimeElement = (val: number) => val.toString().padStart(2, "0");
 
@@ -16,16 +18,21 @@ type CountdownProps = {
 
 const Countdown = ({ target }: CountdownProps) => {
   const initialDiff = useRef(target.diffNow().shiftToAll().toObject()).current;
-  const [[hours, minutes, seconds, milliseconds], setNextTime] = useState<RemainingTime>([
-    initialDiff.hours ?? 0,
-    initialDiff.minutes ?? 0,
-    initialDiff.seconds ?? 0,
-    initialDiff.milliseconds ?? 0,
-  ]);
+  const [[hours, minutes, seconds, milliseconds], setNextTime] =
+    useState<RemainingTime>([
+      initialDiff.hours ?? 0,
+      initialDiff.minutes ?? 0,
+      initialDiff.seconds ?? 0,
+      initialDiff.milliseconds ?? 0,
+    ]);
   const interval = useRef<ReturnType<typeof setInterval>>();
 
   const cantWait = hours <= 0 && minutes <= 0 && seconds <= 20;
-  const celebrate = hours <= 0 && minutes <= 0 && seconds <= 0 && milliseconds <= 0;
+  const startTheShow =
+    hours <= 0 && minutes <= 0 && seconds <= 1 && milliseconds <= 400;
+  const celebrate =
+    hours <= 0 && minutes <= 0 && seconds <= 0 && milliseconds <= 0;
+  const ref = useRef<FireworksHandlers>(null);
 
   useEffect(() => {
     if (celebrate) {
@@ -40,113 +47,50 @@ const Countdown = ({ target }: CountdownProps) => {
         clamp(diff.seconds ?? 0, 0, 60),
         clamp(diff.milliseconds ?? 0, 0, 1000),
       ]);
-    }, 500);
+    }, 200);
 
     return () => clearInterval(interval.current);
   }, [target, celebrate]);
 
-  if (celebrate) {
-    return (
-      <div className="celebration blinking">
-        <p>
+  useEffect(() => {
+    if (ref.current) {
+      if (cantWait) {
+        ref.current.start();
+      } else {
+        ref.current.stop();
+      }
+
+      if (startTheShow) {
+        ref.current.currentOptions.intensity = 35;
+        ref.current.currentOptions.gravity = 1.5;
+        ref.current.currentOptions.explosion = 8;
+        ref.current.currentOptions.traceSpeed = 10;
+      }
+    }
+  }, [ref.current, startTheShow]);
+
+  return (
+    <>
+      <Fireworks
+        ref={ref}
+        options={defaultFireworkOptions}
+        style={{
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          position: "fixed",
+        }}
+      />
+      <div className={celebrate ? "" : "hidden"}>
+        <p className="celebration blinking ">
           Frohes Neues ihr süßen Mäuse{" "}
           <span role="img" aria-label="kissing emoji">
             😘
           </span>
         </p>
-        <Fireworks
-          options={{
-            opacity: 1,
-            acceleration: 1.02,
-            friction: 0.97,
-            gravity: 1.5,
-            particles: 200,
-            explosion: 10,
-            delay: {
-              min: 30,
-              max: 60,
-            },
-            brightness: {
-              min: 80,
-              max: 100,
-            },
-            decay: {
-              min: 0.01,
-              max: 0.02,
-            },
-            flickering: 60,
-            intensity: 35,
-            traceSpeed: 10,
-            lineWidth: {
-              explosion: {
-                min: 5,
-                max: 7,
-              },
-              trace: {
-                min: 3,
-                max: 4,
-              },
-            },
-            autoresize: true,
-          }}
-          style={{
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100%",
-            position: "fixed",
-          }}
-        />
       </div>
-    );
-  }
-
-  return (
-    <>
-    {cantWait &&  <Fireworks
-          options={{
-            opacity: 1,
-            acceleration: 1.02,
-            friction: 0.97,
-            gravity: 2,
-            particles: 200,
-            explosion: 6,
-            delay: {
-              min: 30,
-              max: 60,
-            },
-            brightness: {
-              min: 80,
-              max: 100,
-            },
-            decay: {
-              min: 0.01,
-              max: 0.02,
-            },
-            flickering: 60,
-            intensity: 1,
-            traceSpeed: 1,
-            lineWidth: {
-              explosion: {
-                min: 5,
-                max: 7,
-              },
-              trace: {
-                min: 3,
-                max: 4,
-              },
-            },
-            autoresize: true,
-          }}
-          style={{
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100%",
-            position: "fixed",
-          }}
-        />}
-      <div className="countdown">
+      <div className={`countdown ${!celebrate ? "" : "hidden"}`}>
         <span className="number">{formatTimeElement(hours)}</span>
         <span>:</span>
         <span className="number">{formatTimeElement(minutes)}</span>
