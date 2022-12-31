@@ -34,9 +34,9 @@ const Countdown = ({ target }: CountdownProps) => {
       console.log("interval");
       const diff = target.diffNow().shiftToAll().toObject();
       setNextTime([
-        clamp(diff.hours ?? 0, 0, Number.MAX_SAFE_INTEGER),
-        clamp(diff.minutes ?? 0, 0, Number.MAX_SAFE_INTEGER),
-        clamp(diff.seconds ?? 0, 0, Number.MAX_SAFE_INTEGER),
+        clamp(diff.hours ?? 0, 0, 24),
+        clamp(diff.minutes ?? 0, 0, 60),
+        clamp(diff.seconds ?? 0, 0, 60),
       ]);
     }, 100);
 
@@ -45,7 +45,7 @@ const Countdown = ({ target }: CountdownProps) => {
 
   if (celebrate) {
     return (
-      <div className="countdown blinking">
+      <div className="celebration blinking">
         <p>
           Frohes Neues ihr süßen Mäuse{" "}
           <span role="img" aria-label="kissing emoji">
