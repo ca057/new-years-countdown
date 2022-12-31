@@ -45,18 +45,18 @@ body,
 
 .blinking {
   animation: blinking;
-  animation-duration: 1s;
+  animation-duration: 1.5s;
   animation-timing-function: ease-in-out;
-  animation-iteration-count: infinite;
+  animation-iteration-count: 6;
   animation-direction: alternate;
 }
 
 @keyframes blinking {
   from {
-    opacity: 1;
+    color: white;
   }
 
   to {
-    opacity: 0.2;
+    color: #B3400E;
   }
 }
