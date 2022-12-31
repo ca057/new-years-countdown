@@ -1,6 +1,7 @@
 :root {
   font-family: "Inter", sans-serif;
 }
+
 @supports (font-variation-settings: normal) {
   :root {
     font-family: "Inter var", sans-serif;
@@ -37,16 +38,18 @@ body,
 
 .blinking {
   animation: blinking;
-  animation-duration: 0.5s;
+  animation-duration: 0.6s;
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
   animation-direction: alternate;
 }
+
 @keyframes blinking {
   from {
     opacity: 1;
   }
+
   to {
-    opacity: 0.1;
+    opacity: 0.2;
   }
 }

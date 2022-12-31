@@ -4,6 +4,7 @@ import { Fireworks } from "@fireworks-js/react";
 import { clamp } from "lodash";
 
 import "./styles.css";
+import queryString from "query-string";
 
 const formatTimeElement = (val: number) => val.toString().padStart(2, "0");
 
@@ -18,7 +19,7 @@ const Countdown = ({ target }: CountdownProps) => {
   const [[hours, minutes, seconds], setNextTime] = useState<RemainingTime>([
     initialDiff.hours ?? 0,
     initialDiff.minutes ?? 0,
-    initialDiff.seconds ?? 0
+    initialDiff.seconds ?? 0,
   ]);
   const interval = useRef<ReturnType<typeof setInterval>>();
 
@@ -35,7 +36,7 @@ const Countdown = ({ target }: CountdownProps) => {
       setNextTime([
         clamp(diff.hours ?? 0, 0, 24),
         clamp(diff.minutes ?? 0, 0, 60),
-        clamp(diff.seconds ?? 0, 0, 60)
+        clamp(diff.seconds ?? 0, 0, 60),
       ]);
     }, 100);
 
@@ -55,17 +56,18 @@ const Countdown = ({ target }: CountdownProps) => {
           options={{
             gravity: 1.2,
             acceleration: 1,
+            brightness: { min: 70, max: 100 },
             rocketsPoint: {
               min: 0,
-              max: 100
-            }
+              max: 100,
+            },
           }}
           style={{
             top: 0,
             left: 0,
             width: "100%",
             height: "100%",
-            position: "fixed"
+            position: "fixed",
           }}
         />
       </div>
@@ -87,11 +89,16 @@ const Countdown = ({ target }: CountdownProps) => {
 };
 
 export default function App() {
-  const midnight = DateTime.now().plus({ day: 1 }).startOf("day");
+  const params = queryString.parse(location.search);
+
+  const target =
+    typeof params.target === "string"
+      ? DateTime.fromISO(params.target)
+      : DateTime.now().plus({ day: 1 }).startOf("day");
 
   return (
     <div className="app">
-      <Countdown target={midnight} />
+      <Countdown target={target} />
     </div>
   );
 }
